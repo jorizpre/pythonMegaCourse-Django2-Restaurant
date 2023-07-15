@@ -1,34 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-
-<body>
+<div class="container"> <!-- Bootstrap class within the bootstrap file called in base.html -->
     <h1>Restaurant Menu</h1>
-    {% for meal in meals %}
-    <h2>{{ meal.1 }}</h2>
-    {% for row in item_list %}
-    <!-- item_list is a special variable recognized by Django providing the list of DB records-->
-    <!-- "item" must be the model class name in lower case, which must be followed by "_list"-->
-    {% if row.meal_type == meal.0 %}
-    {% if row.status == 0 %}
-    <a href="{% url 'menu_item' row.pk %}">
-        <h3><del>{{ row.meal }}</del></h3>
-    </a> <!-- the "a" tag turns the text into a link-->
-    <p><del>{{ row.description }}</del></p>
-    {% else %}
-    <a href="{% url 'menu_item' row.pk %}">
-        <h3>{{ row.meal }}</h3>
-    </a>
-    <p>{{ row.description }}</p>
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-    {% endfor %}
-    <!-- Jinja2 syntax: loop to show all the "meals" items (.1 to only show the dictionary value (not the key)) -->
-</body>
+    <ul class="list-group list-group-flush">
+        {% for meal in meals %}
+        <h2 class="pt-5">{{ meal.1 }}</h2>
+        {% for row in item_list %}
+        <!-- item_list is a special variable recognized by Django providing the list of DB records-->
+        <!-- "item" must be the model class name in lower case, which must be followed by "_list"-->
+        {% if row.meal_type == meal.0 %}
+        {% if row.status == 0 %}
+        <li class="list-gropu-item d-flex justify-content-between align-items-center border-0 pb-0">
+            <a href="{% url 'menu_item' row.pk %}">
+                <h3><del>{{ row.meal }}</del></h3>
+            </a> <!-- the "a" tag turns the text into a link-->
+            <span class="badge bg-primary rounded-pill"> {{ row.price }}</span>
+        </li>
+        <li class="list-group-item pt-0">
+            <p><del>{{ row.description }}</del></p>
+        </li>
+        {% else %}
+        <li class="list-gropu-item d-flex justify-content-between align-items-center border-0 pb-0">
+            <a href="{% url 'menu_item' row.pk %}">
+                <h3>{{ row.meal }}</h3>
+            </a>
+            <span class="badge bg-primary rounded-pill"> {{ row.price }}</span>
+        </li>
+        <li class="list-group-item pt-0">
+            <p>{{ row.description }}</p>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </ul>
+</div>
 
-</html>
+{% endblock content %}
